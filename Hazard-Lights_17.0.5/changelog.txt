@@ -1,0 +1,35 @@
+---------------------------------------------------------------------------------------------------
+Version: 17.0.5
+Date: 30. 11. 2019
+  Changes:
+    - Fixed another possible reason for lingering lights
+  Bugfixes:
+    - Fixed a possible Save Game Incompatibility
+---------------------------------------------------------------------------------------------------
+Version: 17.0.4
+Date: 30. 11. 2019
+  Changes:
+    - Added a Setting to rescan the world so that no lights would be lingering around
+---------------------------------------------------------------------------------------------------
+Version: 17.0.3
+Date: 10. 5. 2017
+  Changes:
+    - Fixed Issue with creating or loading a world. (grumble grumble require grumble grumble)
+---------------------------------------------------------------------------------------------------
+Version: 17.0.2
+Date: 09. 05. 2019
+  Scripting:
+    - Made CommonEntities into a global table (saved in savefile).
+  Bugfixes:
+    - Fixed Issues with PVP Event.
+    - Fixed Issues with internal function GetSurfaceOfEnity.
+---------------------------------------------------------------------------------------------------
+Version: 17.0.1
+Date: 4. 5. 2017
+  Changes:
+    - The name of the mod was changed from Hazerd Lights to Hazard Lights
+---------------------------------------------------------------------------------------------------
+Version: 17.0.0 - First public release
+Date: 4. 5. 2017
+  Major Features:
+    - Initial release
