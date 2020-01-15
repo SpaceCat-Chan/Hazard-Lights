@@ -1,3 +1,4 @@
+pcall(require,'__debugadapter__/debugadapter.lua')
 Temp = require("CommonEntities")
 
 function FindSurfaceOfentity(entity) --gets the surface of an Entity
@@ -12,9 +13,25 @@ function FindSurfaceOfentity(entity) --gets the surface of an Entity
 	end
 end
 
-function MakeGraphics(Entity, forces, players) --Sets up the Rendring for an Entity. arg 1 Expects an Entity, arg 2 (optional) expects a table of forces, arg 3 (optional) expects a table of players, returns nothing, both force and player have to be fufilled to show light to a player
+
+--[[
+	Entity: Entity ID to make graphics for
+	forces: Table of Forces that should be able to see lights
+	players: Table of players that should be able to see lights
+
+	return: nil
+
+	note: forces and players operate in an AND fashion
+]]
+function MakeGraphics(Entity, forces, players)
 	--set up Variables
 	if(global.Renders[Entity.unit_number] ~= nil) then
+		return nil
+	end
+	if Entity.unit_number == nil then
+		if global.CommonEntities[Entity.name] then
+			global.CommonEntities[Entity.name] = nil
+		end
 		return nil
 	end
 	
@@ -60,31 +77,59 @@ function EntityRemove(event) --Handles when an Entity is removed form the world
 	end
 end
 
+function PickerDolliesHandler(event)
+	if event.moved_entity.valid and event.moved_entity.unit_number then
+		local Players, Forces
+		Forces = global.Renders[event.moved_entity.unit_number].forces
+		Players = global.Renders[event.moved_entity.unit_number].players
+		RemoveRendersFromEntity(event.moved_entity.unit_number)
+		MakeGraphics(event.moved_entity.unit_number, Forces, Players)
+	end
+end
+
 function on_init() --sets up global.Renders and Redoes Rendering
 	global.Renders = {}	
 	global.CommonEntities = Temp
 	RedoRendering()
+	if remote.interfaces["PickerDollies"] and remote.interfaces["PickerDollies"]["dolly_moved_entity_id"] then
+		script.on_event(remote.call("PickerDollies", "dolly_moved_entity_id"), PickerDolliesHandler)
+	end
 end
 
 function RedoRendering() --Function that goes through all Entities and add rendering to thoese that need it
 	for __,Surface in pairs(game.surfaces) do
 		local EntityList = Surface.find_entities()
-		for __,Entity in pairs(EntityList) do
+		for __,Entity in pairs(EntityList) do repeat
+			if Entity.unit_number == nil then
+				global.CommonEntities[Entity.name] = nil
+				break
+			end
 			if global.CommonEntities[Entity.name] and global.Renders[Entity.unit_number] == nil then
 				MakeGraphics(Entity)
 			end
-		end
+		until true end
 	end	
 end
 
-function AddEntities(Table) -- Adds a table of Entities to CommonEntities and Redoes the Rendering. expects a table of Entity names, returns nothing
+--[[
+	Table: list of entity names to add
+
+	return: nil
+]]
+function AddEntities(Table)
 	for __,EntityName in pairs(Table) do
 		global.CommonEntities[EntityName] = true
 	end
 	RedoRendering()
 end
 
-function RemoveEntities(Table) --Removes a table of Entities to CommonEntities and Removes Rendering from them. expects a table of Entity names, returns nothing
+
+--[[
+	Table: list of entity names to remove
+
+	return: nil
+]]
+function RemoveEntities(Table)
 	for __,EntityName in pairs(Table) do
 		
 		global.CommonEntities[EntityName] = nil
@@ -100,7 +145,12 @@ function RemoveEntities(Table) --Removes a table of Entities to CommonEntities a
 	end
 end
 
-function GetRenders() --returns a table of this fromat: {Entity.unit_number = {Render1, Render2, Render3, Render4, Render5, Render6, Render7, Render8}, Entity2.unit_number = {....}, Entity3.unit_number = ....} contains all Entities that have Renders
+--[[
+	return: list of all renders
+
+	format: {Entity.unit_number = {Render1, Render2, Render3, Render4, Render5, Render6, Render7, Render8, players = ListOfPlayers, forces = ListOfForces, Entity = ReferenceToEntity}, Entity2.unit_number = {...}}
+]]
+function GetRenders()
 	return global.Renders
 end
 
@@ -150,7 +200,7 @@ function RefrestEvent(event)
 	end
 end
 
-remote.add_interface("Hazard-Lights", {AddEntities = AddEntities, RemoveEntities = RemoveEntities, MakeGraphics = MakeGraphics, GetCommonEntities = GetCommonEntities, GetRenders = GetRenders, RemoveRendersFromEntity = RemoveRendersFromEntity, SetReserved = SetReserved, RemoveAllRenders = RemoveAllRenders, RefreshRenders = RefreshRenders})
+remote.add_interface("Hazard-Lights", {AddEntities = AddEntities, RemoveEntities = RemoveEntities, MakeGraphics = MakeGraphics, GetCommonEntities = GetCommonEntities, GetRenders = GetRenders, RemoveRendersFromEntity = RemoveRendersFromEntity, SetReserved = SetReserved, RemoveAllRenders = RemoveAllRenders, RefreshRenders = RefreshRenders, RedoRendering = RedoRendering})
 --[[
 Interface Instructions and Function List:
 

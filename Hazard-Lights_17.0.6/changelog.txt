@@ -1,4 +1,11 @@
 ---------------------------------------------------------------------------------------------------
+Version: 17.0.6
+Date: 2019-12-29
+  Changes:
+    - Added option for other mods to do extra optimisation
+  Bugfixes:
+    - Fixed Crash when other mods fuck up
+---------------------------------------------------------------------------------------------------
 Version: 17.0.5
 Date: 30. 11. 2019
   Changes:
