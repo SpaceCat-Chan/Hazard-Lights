@@ -1,4 +1,4 @@
-Target = Hazard-Lights_17.0.6
+Target = Hazard-Lights_17.0.7
 FactorioModFolder = /home/spacecatchan/Documents/factorio/mods
 
 all: $(Target)
