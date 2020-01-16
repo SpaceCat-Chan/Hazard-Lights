@@ -1,0 +1,52 @@
+---------------------------------------------------------------------------------------------------
+Version: 17.0.8
+Date: 2020-1-15
+  Bugfixes:
+    - Fixed Dependancy Issue
+---------------------------------------------------------------------------------------------------
+Version: 17.0.7
+Date: 2020-1-15
+  Bugfixes:
+    - Added support for PickerDollies
+---------------------------------------------------------------------------------------------------
+Version: 17.0.6
+Date: 2019-12-29
+  Changes:
+    - Added option for other mods to do extra optimisation
+  Bugfixes:
+    - Fixed Crash when other mods fuck up
+---------------------------------------------------------------------------------------------------
+Version: 17.0.5
+Date: 2019-11-30
+  Changes:
+    - Fixed another possible reason for lingering lights
+  Bugfixes:
+    - Fixed a possible Save Game Incompatibility
+---------------------------------------------------------------------------------------------------
+Version: 17.0.4
+Date: 2019-11-30
+  Changes:
+    - Added a Setting to rescan the world so that no lights would be lingering around
+---------------------------------------------------------------------------------------------------
+Version: 17.0.3
+Date: 2017-5-10
+  Changes:
+    - Fixed Issue with creating or loading a world. (grumble grumble require grumble grumble)
+---------------------------------------------------------------------------------------------------
+Version: 17.0.2
+Date: 2019-5-9
+  Scripting:
+    - Made CommonEntities into a global table (saved in savefile).
+  Bugfixes:
+    - Fixed Issues with PVP Event.
+    - Fixed Issues with internal function GetSurfaceOfEnity.
+---------------------------------------------------------------------------------------------------
+Version: 17.0.1
+Date: 2017-5-4
+  Changes:
+    - The name of the mod was changed from Hazerd Lights to Hazard Lights
+---------------------------------------------------------------------------------------------------
+Version: 17.0.0 - First public release
+Date: 2017-5-4
+  Major Features:
+    - Initial release
