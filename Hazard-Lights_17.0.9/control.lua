@@ -79,6 +79,9 @@ end
 
 function PickerDolliesHandler(event)
 	if event.moved_entity.valid and event.moved_entity.unit_number then
+		if not global.CommonEntities[event.moved_entity.name] then
+			return
+		end
 		local Players, Forces
 		Forces = global.Renders[event.moved_entity.unit_number].forces
 		Players = global.Renders[event.moved_entity.unit_number].players
