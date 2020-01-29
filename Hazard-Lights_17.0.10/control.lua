@@ -46,6 +46,12 @@ function MakeGraphics(Entity, forces, players)
 	Surface = FindSurfaceOfentity(Entity)
 	
 	global.Renders[Entity.unit_number] = {}
+
+	local Scale, Intensity, Red, Alpha
+	Scale = settings.global["HazardLights-Scale"].value
+	Intensity = settings.global["HazardLights-Intensity"].value
+	Red = settings.global["HazardLights-Red"].value
+	Alpha = settings.global["HazardLights-Alpha"].value
 	
 	--make the actual render objects
 	global.Renders[Entity.unit_number]["1"] = rendering.draw_sprite{sprite = "Hazard_Light", render_layer = "higher-object-under", target = {left_x, bottom_y}, surface = Surface, visable = true, forces = forces, players = players}
@@ -53,10 +59,10 @@ function MakeGraphics(Entity, forces, players)
 	global.Renders[Entity.unit_number]["3"] = rendering.draw_sprite{sprite = "Hazard_Light", render_layer = "higher-object-under", target = {right_x, bottom_y}, surface = Surface, visable = true, forces = forces, players = players}
 	global.Renders[Entity.unit_number]["4"] = rendering.draw_sprite{sprite = "Hazard_Light", render_layer = "higher-object-under", target = {right_x, top_y}, surface = Surface, visable = true, forces = forces, players = players}
 			
-	global.Renders[Entity.unit_number]["5"] = rendering.draw_light({sprite = "utility/light_medium", scale = 0.3, intensity = 0.7, color = {r = 0.9, a = 0.6}, target = {left_x, bottom_y}, surface = Surface, visable = true, forces = forces, players = players})
-	global.Renders[Entity.unit_number]["6"] = rendering.draw_light({sprite = "utility/light_medium", scale = 0.3, intensity = 0.7, color = {r = 0.9, a = 0.6}, target = {left_x, top_y}, surface = Surface, visable = true, forces = forces, players = players})
-	global.Renders[Entity.unit_number]["7"] = rendering.draw_light({sprite = "utility/light_medium", scale = 0.3, intensity = 0.7, color = {r = 0.9, a = 0.6}, target = {right_x, bottom_y}, surface = Surface, visable = true, forces = forces, players = players})
-	global.Renders[Entity.unit_number]["8"] = rendering.draw_light({sprite = "utility/light_medium", scale = 0.3, intensity = 0.7, color = {r = 0.9, a = 0.6}, target = {right_x, top_y}, surface = Surface, visable = true, forces = forces, players = players})
+	global.Renders[Entity.unit_number]["5"] = rendering.draw_light({sprite = "utility/light_medium", scale = Scale, intensity = Intensity, color = {r = Red, a = Alpha}, target = {left_x, bottom_y}, surface = Surface, visable = true, forces = forces, players = players})
+	global.Renders[Entity.unit_number]["6"] = rendering.draw_light({sprite = "utility/light_medium", scale = Scale, intensity = Intensity, color = {r = Red, a = Alpha}, target = {left_x, top_y}, surface = Surface, visable = true, forces = forces, players = players})
+	global.Renders[Entity.unit_number]["7"] = rendering.draw_light({sprite = "utility/light_medium", scale = Scale, intensity = Intensity, color = {r = Red, a = Alpha}, target = {right_x, bottom_y}, surface = Surface, visable = true, forces = forces, players = players})
+	global.Renders[Entity.unit_number]["8"] = rendering.draw_light({sprite = "utility/light_medium", scale = Scale, intensity = Intensity, color = {r = Red, a = Alpha}, target = {right_x, top_y}, surface = Surface, visable = true, forces = forces, players = players})
 	
 	global.Renders[Entity.unit_number].players = players
 	global.Renders[Entity.unit_number].forces = forces
@@ -209,6 +215,13 @@ function RefrestEvent(event)
 	end
 end
 
+function SettingChange(event)
+	if event.setting == "HazardLights-Intensity" or event.setting == "HazardLights-Scale" or
+		event.setting == "HazardLights-Red" or event.setting == "HazardLights-Alpha" then
+		RefreshRenders()
+	end
+end
+
 remote.add_interface("Hazard-Lights", {AddEntities = AddEntities, RemoveEntities = RemoveEntities, MakeGraphics = MakeGraphics, GetCommonEntities = GetCommonEntities, GetRenders = GetRenders, RemoveRendersFromEntity = RemoveRendersFromEntity, SetReserved = SetReserved, RemoveAllRenders = RemoveAllRenders, RefreshRenders = RefreshRenders, RedoRendering = RedoRendering})
 --[[
 Interface Instructions and Function List:
@@ -252,5 +265,5 @@ script.on_event(defines.events.on_robot_pre_mined, EntityRemove)
 script.on_event(defines.events.on_entity_died, EntityRemove)
 script.on_event(defines.events.script_raised_destroy, EntityRemove)
 
-
+script.on_event(defines.events.on_runtime_mod_setting_changed, SettingChange)
 script.on_event(defines.events.on_tick, RefrestEvent)

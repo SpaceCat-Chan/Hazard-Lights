@@ -1,4 +1,12 @@
 ---------------------------------------------------------------------------------------------------
+Version: 17.0.10
+Date: 2020-1-29
+  Changes:
+    - Added options to change settings for lights
+
+  Known Issues:
+    - Light settings will not be updated if the light is Reserved
+---------------------------------------------------------------------------------------------------
 Version: 17.0.9
 Date: 2020-1-17
   Bugfixes:
