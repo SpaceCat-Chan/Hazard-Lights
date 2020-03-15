@@ -1,7 +1,11 @@
 ---------------------------------------------------------------------------------------------------
 Version: 18.0.2
-Date: ????
+Date: 2020-03-15
   Changes:
+    - Made the optimization from 17.0.6 work
+
+  Bugfixes:
+    - fixed issue that if an API function was called before init it could cause a crash
 ---------------------------------------------------------------------------------------------------
 Version: 18.0.1
 Date: 2020-1-29
