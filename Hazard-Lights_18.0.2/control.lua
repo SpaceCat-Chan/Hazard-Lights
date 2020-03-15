@@ -71,7 +71,7 @@ function MakeGraphics(Entity, forces, players)
 end
 
 function EntityCreate(event) --Handles when an Entity is added to the world
-	local Entity = event.entity or event.created_entity
+	local Entity = event.entity or event.created_entity or event.destination
 	if global.CommonEntities[Entity.name] then
 		MakeGraphics(Entity)
 	end
@@ -131,11 +131,13 @@ end
 
 	return: nil
 ]]
-function AddEntities(Table)
+function AddEntities(Table, SkipRedo)
 	for __,EntityName in pairs(Table) do
 		global.CommonEntities[EntityName] = true
 	end
-	RedoRendering()
+	if not SkipRedo then
+		RedoRendering()
+	end
 end
 
 
@@ -153,7 +155,7 @@ function RemoveEntities(Table)
 		
 		Entities = Surface.find_entities_filtered{name=Table}
 		for __,Entity in pairs(Entities) do
-			if not (global.Renders[Entity.unit_number].Reserved) then
+			if global.Renders[Entity.unit_number] and not (global.Renders[Entity.unit_number].Reserved) then
 				RemoveRendersFromEntity(Entity.unit_number)
 			end
 		end
@@ -259,6 +261,7 @@ script.on_event(defines.events.on_built_entity, EntityCreate)
 script.on_event(defines.events.on_robot_built_entity, EntityCreate)
 script.on_event(defines.events.script_raised_built, EntityCreate)
 script.on_event(defines.events.script_raised_revive, EntityCreate)
+script.on_event(defines.events.on_entity_cloned, EntityCreate)
 
 script.on_event(defines.events.on_pre_player_mined_item, EntityRemove)
 script.on_event(defines.events.on_robot_pre_mined, EntityRemove)
