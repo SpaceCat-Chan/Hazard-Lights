@@ -1,4 +1,9 @@
 ---------------------------------------------------------------------------------------------------
+Version: 18.0.3
+Date: 2020-03-23
+  Bugfixes:
+    - fixed issue in pickerdollies handler where if an entity was unregistered the game would crash
+---------------------------------------------------------------------------------------------------
 Version: 18.0.2
 Date: 2020-03-15
   Changes:

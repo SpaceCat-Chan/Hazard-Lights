@@ -88,6 +88,11 @@ function PickerDolliesHandler(event)
 		if not global.CommonEntities[event.moved_entity.name] then
 			return
 		end
+		if global.Renders[event.moved_entity.unit_number] == nil then
+			MakeGraphics(event.moved_entity)
+			RemoveInvalidRenders()
+			return
+		end
 		local Players, Forces
 		Forces = global.Renders[event.moved_entity.unit_number].forces
 		Players = global.Renders[event.moved_entity.unit_number].players
