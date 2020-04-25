@@ -38,10 +38,10 @@ function MakeGraphics(Entity, forces, players)
 	EntityPrototype = Entity.prototype
 	Position = Entity.position
 	
-	local left_x = Position.x + EntityPrototype.collision_box["left_top"].x
-	local bottom_y = Position.y + EntityPrototype.collision_box["right_bottom"].y
-	local right_x = Position.x + EntityPrototype.collision_box["right_bottom"].x
-	local top_y = Position.y + EntityPrototype.collision_box["left_top"].y
+	local left_x = Entity.bounding_box["left_top"].x
+	local bottom_y = Entity.bounding_box["right_bottom"].y
+	local right_x = Entity.bounding_box["right_bottom"].x
+	local top_y = Entity.bounding_box["left_top"].y
 	
 	Surface = FindSurfaceOfentity(Entity)
 	
@@ -199,9 +199,10 @@ function RemoveAllRenders(Force) --removes renders from every single entity in t
 	end
 end
 
-function RefreshRenders(Force)
-	RemoveAllRenders(Force)
-	RedoRendering()
+function RefreshRenders()
+	for _,v in pairs(global.Renders) do
+		RotateHandler({entity = v.Entity})
+	end
 end
 
 function RemoveInvalidRenders()
@@ -227,6 +228,21 @@ function SettingChange(event)
 		event.setting == "HazardLights-Red" or event.setting == "HazardLights-Alpha" then
 		RefreshRenders()
 	end
+end
+
+function RotateHandler(event)
+	if event.entity.unit_number == nil then
+		return nil
+	end
+	if global.Renders[event.entity.unit_number] == nil then
+		return nil
+	end
+	local Players = global.Renders[event.entity.unit_number].players
+	local Forces = global.Renders[event.entity.unit_number].forces
+	local Reservation = global.Renders[event.entity.unit_number].Reserved
+	RemoveRendersFromEntity(event.entity.unit_number)
+	MakeGraphics(event.entity, Forces, Players)
+	SetReserved(Reservation, event.entity.unit_number)
 end
 
 remote.add_interface("Hazard-Lights", {AddEntities = AddEntities, RemoveEntities = RemoveEntities, MakeGraphics = MakeGraphics, GetCommonEntities = GetCommonEntities, GetRenders = GetRenders, RemoveRendersFromEntity = RemoveRendersFromEntity, SetReserved = SetReserved, RemoveAllRenders = RemoveAllRenders, RefreshRenders = RefreshRenders, RedoRendering = RedoRendering})
@@ -275,3 +291,5 @@ script.on_event(defines.events.script_raised_destroy, EntityRemove)
 
 script.on_event(defines.events.on_runtime_mod_setting_changed, SettingChange)
 script.on_event(defines.events.on_tick, RefrestEvent)
+
+script.on_event(defines.events.on_player_rotated_entity, RotateHandler)

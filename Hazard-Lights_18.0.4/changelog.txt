@@ -1,4 +1,10 @@
 ---------------------------------------------------------------------------------------------------
+Version: 18.0.4
+Date: 2020-04-25
+  Bugfixes:
+    - made rotated entities have correct light positions
+    - made reserved entities update their light attributes
+---------------------------------------------------------------------------------------------------
 Version: 18.0.3
 Date: 2020-03-23
   Bugfixes:
