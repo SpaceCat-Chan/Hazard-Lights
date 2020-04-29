@@ -1,4 +1,4 @@
-CommonEntities = {}
+local CommonEntities = {}
 CommonEntities["assembling-machine-1"] = true
 CommonEntities["assembling-machine-2"] = true
 CommonEntities["assembling-machine-3"] = true

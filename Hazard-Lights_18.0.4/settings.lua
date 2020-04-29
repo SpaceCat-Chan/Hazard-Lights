@@ -34,15 +34,35 @@ data:extend{
         name = "HazardLights-Red",
         type = "double-setting",
         setting_type = "runtime-global",
-        order = "c-c",
+        order = "c-c1",
+        maximum_value = 1,
         default_value = 0.9,
+        minimum_value = 0
+    },
+    {
+        name = "HazardLights-Green",
+        type = "double-setting",
+        setting_type = "runtime-global",
+        order = "c-c2",
+        maximum_value = 1,
+        default_value = 0,
+        minimum_value = 0
+    },
+    {
+        name = "HazardLights-Blue",
+        type = "double-setting",
+        setting_type = "runtime-global",
+        order = "c-c3",
+        maximum_value = 1,
+        default_value = 0,
         minimum_value = 0
     },
     {
         name = "HazardLights-Alpha",
         type = "double-setting",
         setting_type = "runtime-global",
-        order = "c-e",
+        order = "c-c4",
+        maximum_value = 1,
         default_value = 0.6,
         minimum_value = 0
     }

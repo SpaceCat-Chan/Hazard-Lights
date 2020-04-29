@@ -1,5 +1,5 @@
 pcall(require,'__debugadapter__/debugadapter.lua')
-Temp = require("CommonEntities")
+local Temp = require("CommonEntities")
 
 function FindSurfaceOfentity(entity) --gets the surface of an Entity
 	for __,Surface in pairs(game.surfaces) do
@@ -23,17 +23,7 @@ end
 
 	note: forces and players operate in an AND fashion
 ]]
-function MakeGraphics(Entity, forces, players)
-	--set up Variables
-	if(global.Renders[Entity.unit_number] ~= nil) then
-		return nil
-	end
-	if Entity.unit_number == nil then
-		if global.CommonEntities[Entity.name] then
-			global.CommonEntities[Entity.name] = nil
-		end
-		return nil
-	end
+function MakeBasicGraphics(Entity, forces, players)
 	
 	EntityPrototype = Entity.prototype
 	Position = Entity.position
@@ -45,25 +35,42 @@ function MakeGraphics(Entity, forces, players)
 	
 	Surface = FindSurfaceOfentity(Entity)
 	
-	global.Renders[Entity.unit_number] = {}
-
-	local Scale, Intensity, Red, Alpha
+	local Scale, Intensity, Red, Green, Blue, Alpha
 	Scale = settings.global["HazardLights-Scale"].value
 	Intensity = settings.global["HazardLights-Intensity"].value
 	Red = settings.global["HazardLights-Red"].value
+	Green = settings.global["HazardLights-Green"].value
+	Blue = settings.global["HazardLights-Blue"].value
 	Alpha = settings.global["HazardLights-Alpha"].value
 	
 	--make the actual render objects
-	global.Renders[Entity.unit_number]["1"] = rendering.draw_sprite{sprite = "Hazard_Light", render_layer = "higher-object-under", target = {left_x, bottom_y}, surface = Surface, visable = true, forces = forces, players = players}
-	global.Renders[Entity.unit_number]["2"] = rendering.draw_sprite{sprite = "Hazard_Light", render_layer = "higher-object-under", target = {left_x, top_y}, surface = Surface, visable = true, forces = forces, players = players}
-	global.Renders[Entity.unit_number]["3"] = rendering.draw_sprite{sprite = "Hazard_Light", render_layer = "higher-object-under", target = {right_x, bottom_y}, surface = Surface, visable = true, forces = forces, players = players}
-	global.Renders[Entity.unit_number]["4"] = rendering.draw_sprite{sprite = "Hazard_Light", render_layer = "higher-object-under", target = {right_x, top_y}, surface = Surface, visable = true, forces = forces, players = players}
+	global.Renders[Entity.unit_number]["1"] = rendering.draw_sprite{sprite = "Hazard_Light", render_layer = "higher-object-under", target = {left_x, bottom_y}, surface = Surface, visable = true, forces = forces, players = players, tint = {r = Red, g = Green, b = Blue, a = Alpha}}
+	global.Renders[Entity.unit_number]["2"] = rendering.draw_sprite{sprite = "Hazard_Light", render_layer = "higher-object-under", target = {left_x, top_y}, surface = Surface, visable = true, forces = forces, players = players, tint = {r = Red, g = Green, b = Blue, a = Alpha}}
+	global.Renders[Entity.unit_number]["3"] = rendering.draw_sprite{sprite = "Hazard_Light", render_layer = "higher-object-under", target = {right_x, bottom_y}, surface = Surface, visable = true, forces = forces, players = players, tint = {r = Red, g = Green, b = Blue, a = Alpha}}
+	global.Renders[Entity.unit_number]["4"] = rendering.draw_sprite{sprite = "Hazard_Light", render_layer = "higher-object-under", target = {right_x, top_y}, surface = Surface, visable = true, forces = forces, players = players, tint = {r = Red, g = Green, b = Blue, a = Alpha}}
 			
-	global.Renders[Entity.unit_number]["5"] = rendering.draw_light({sprite = "utility/light_medium", scale = Scale, intensity = Intensity, color = {r = Red, a = Alpha}, target = {left_x, bottom_y}, surface = Surface, visable = true, forces = forces, players = players})
-	global.Renders[Entity.unit_number]["6"] = rendering.draw_light({sprite = "utility/light_medium", scale = Scale, intensity = Intensity, color = {r = Red, a = Alpha}, target = {left_x, top_y}, surface = Surface, visable = true, forces = forces, players = players})
-	global.Renders[Entity.unit_number]["7"] = rendering.draw_light({sprite = "utility/light_medium", scale = Scale, intensity = Intensity, color = {r = Red, a = Alpha}, target = {right_x, bottom_y}, surface = Surface, visable = true, forces = forces, players = players})
-	global.Renders[Entity.unit_number]["8"] = rendering.draw_light({sprite = "utility/light_medium", scale = Scale, intensity = Intensity, color = {r = Red, a = Alpha}, target = {right_x, top_y}, surface = Surface, visable = true, forces = forces, players = players})
-	
+	global.Renders[Entity.unit_number]["5"] = rendering.draw_light({sprite = "utility/light_medium", scale = Scale, intensity = Intensity, color = {r = Red, g = Green, b = Blue, a = Alpha}, target = {left_x, bottom_y}, surface = Surface, visable = true, forces = forces, players = players})
+	global.Renders[Entity.unit_number]["6"] = rendering.draw_light({sprite = "utility/light_medium", scale = Scale, intensity = Intensity, color = {r = Red, g = Green, b = Blue, a = Alpha}, target = {left_x, top_y}, surface = Surface, visable = true, forces = forces, players = players})
+	global.Renders[Entity.unit_number]["7"] = rendering.draw_light({sprite = "utility/light_medium", scale = Scale, intensity = Intensity, color = {r = Red, g = Green, b = Blue, a = Alpha}, target = {right_x, bottom_y}, surface = Surface, visable = true, forces = forces, players = players})
+	global.Renders[Entity.unit_number]["8"] = rendering.draw_light({sprite = "utility/light_medium", scale = Scale, intensity = Intensity, color = {r = Red, g = Green, b = Blue, a = Alpha}, target = {right_x, top_y}, surface = Surface, visable = true, forces = forces, players = players})
+end
+
+function MakeGraphics(Entity, forces, players)
+	--set up Variables
+	if(global.Renders[Entity.unit_number] ~= nil) then
+		return nil
+	end
+	if Entity.unit_number == nil then
+		if global.CommonEntities[Entity.name] then
+			global.CommonEntities[Entity.name] = nil
+		end
+		return nil
+	end
+
+	global.Renders[Entity.unit_number] = {}
+
+	MakeBasicGraphics(Entity, forces, players)
+
 	global.Renders[Entity.unit_number].players = players
 	global.Renders[Entity.unit_number].forces = forces
 	global.Renders[Entity.unit_number].Entity = Entity
@@ -225,7 +232,7 @@ end
 
 function SettingChange(event)
 	if event.setting == "HazardLights-Intensity" or event.setting == "HazardLights-Scale" or
-		event.setting == "HazardLights-Red" or event.setting == "HazardLights-Alpha" then
+		event.setting == "HazardLights-Red" or event.setting == "HazardLights-Green" or event.setting == "HazardLights-Blue"or event.setting == "HazardLights-Alpha" then
 		RefreshRenders()
 	end
 end
@@ -237,11 +244,14 @@ function RotateHandler(event)
 	if global.Renders[event.entity.unit_number] == nil then
 		return nil
 	end
+	
 	local Players = global.Renders[event.entity.unit_number].players
 	local Forces = global.Renders[event.entity.unit_number].forces
 	local Reservation = global.Renders[event.entity.unit_number].Reserved
-	RemoveRendersFromEntity(event.entity.unit_number)
-	MakeGraphics(event.entity, Forces, Players)
+	for RenderID = 1,8 do
+		rendering.destroy(global.Renders[event.entity.unit_number][tostring(RenderID)])
+	end
+	MakeBasicGraphics(event.entity, Forces, Players)
 	SetReserved(Reservation, event.entity.unit_number)
 end
 
