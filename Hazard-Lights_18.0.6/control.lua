@@ -1,4 +1,3 @@
-pcall(require,'__debugadapter__/debugadapter.lua')
 local Temp = require("CommonEntities")
 
 function FindSurfaceOfentity(entity) --gets the surface of an Entity
@@ -207,8 +206,17 @@ function RemoveAllRenders(Force) --removes renders from every single entity in t
 end
 
 function RefreshRenders()
-	for _,v in pairs(global.Renders) do
+	local InvalidEntities = {}
+	for k,v in pairs(global.Renders) do repeat
+		if not v.Entity.valid then
+			table.insert(InvalidEntities, k)
+			break --for loop has another loop in it that only runs once,
+			-- therefore this break works like a continue
+		end
 		RotateHandler({entity = v.Entity})
+	until true end
+	for _,Remove in pairs(InvalidEntities) do
+		RemoveRendersFromEntity(Remove)
 	end
 end
 
