@@ -1,4 +1,9 @@
 ---------------------------------------------------------------------------------------------------
+Version: 18.0.7
+Date: 2020-06-13
+  Bugfixes:
+    - Small changelog change
+---------------------------------------------------------------------------------------------------
 Version: 18.0.6
 Date: 2020-06-13
   Bugfixes:
@@ -93,7 +98,7 @@ Date: 2017-5-4
   Changes:
     - The name of the mod was changed from Hazerd Lights to Hazard Lights
 ---------------------------------------------------------------------------------------------------
-Version: 17.0.0 - First public release
+Version: 17.0.0
 Date: 2017-5-4
   Major Features:
     - Initial release
